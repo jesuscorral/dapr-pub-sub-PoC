@@ -1,0 +1,6 @@
+@Pub_HostAddress = http://localhost:5044
+
+GET {{Pub_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

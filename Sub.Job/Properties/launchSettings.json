@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Sub.Job": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}

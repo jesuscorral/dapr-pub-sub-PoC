@@ -1,0 +1,11 @@
+version: 1
+common:
+  resourcesPath: ../components/redis
+apps:
+  - appID: Pub
+    appDirPath: ./Pub/
+    command: ["dotnet", "run"]
+  - appID: Sub
+    appDirPath: ./Sub/
+    appPort: 7006
+    command: ["dotnet", "run"]
