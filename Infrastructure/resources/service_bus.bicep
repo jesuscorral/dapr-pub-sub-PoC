@@ -24,18 +24,4 @@ resource servicebustopic 'Microsoft.ServiceBus/namespaces/topics@2024-01-01' = {
   }
 }
 
-// resource serviceBusQueue 'Microsoft.ServiceBus/namespaces/queues@2024-01-01' = {
-//   parent: serviceBus
-//   name: service_bus_queue_name
-//   properties: {
-//     lockDuration: 'PT5M'
-//     maxSizeInMegabytes: 1024
-//     requiresDuplicateDetection: false
-//     requiresSession: false
-//     defaultMessageTimeToLive: 'P14D'
-//     deadLetteringOnMessageExpiration: true
-//     duplicateDetectionHistoryTimeWindow: 'PT10M'
-//     maxDeliveryCount: 10
-//   }
-// }
 output service_bus_namespace_name string = serviceBus.name

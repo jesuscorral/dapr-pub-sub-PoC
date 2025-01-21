@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.32.4.45862",
-      "templateHash": "2538037317923474793"
+      "templateHash": "7525366985970867564"
     }
   },
   "parameters": {
@@ -16,8 +16,7 @@
   },
   "variables": {
     "containerAppEnvironmentName": "jcp01-pub-sub-env",
-    "publisher_container_app_name": "pub",
-    "daprPort": 3500
+    "publisher_container_app_name": "pub"
   },
   "resources": [
     {
@@ -373,10 +372,7 @@
             "value": "[reference(resourceId('Microsoft.Resources/deployments', 'containerAppEnv'), '2022-09-01').outputs.id.value]"
           },
           "imageName": {
-            "value": "docker.io/jesuscorral/pub:jcp08"
-          },
-          "daprPort": {
-            "value": "[variables('daprPort')]"
+            "value": "docker.io/jesuscorral/pub:jcp09"
           }
         },
         "template": {
@@ -386,7 +382,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.32.4.45862",
-              "templateHash": "4523442835722345444"
+              "templateHash": "10889896577874725292"
             }
           },
           "parameters": {
@@ -401,9 +397,6 @@
             },
             "imageName": {
               "type": "string"
-            },
-            "daprPort": {
-              "type": "int"
             }
           },
           "resources": [
@@ -417,8 +410,7 @@
                 "configuration": {
                   "dapr": {
                     "enabled": true,
-                    "appId": "[parameters('containerAppName')]",
-                    "appPort": "[parameters('daprPort')]"
+                    "appId": "[parameters('containerAppName')]"
                   },
                   "ingress": {
                     "external": true,

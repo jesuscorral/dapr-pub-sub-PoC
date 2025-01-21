@@ -2,7 +2,6 @@ param containerAppName string
 param location string
 param container_app_env_id string
 param imageName string
-param daprPort int
 
 resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
   name: containerAppName
@@ -13,7 +12,6 @@ resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
       dapr: {
         enabled: true
         appId: containerAppName
-        appPort: daprPort
       }
       ingress: {
         external: true

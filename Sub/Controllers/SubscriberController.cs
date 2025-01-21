@@ -21,6 +21,7 @@ namespace Sub.Controllers
         {
 
             var parameters = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonElement);
+            Console.WriteLine($"Sub -- Starting!!");
 
             if (parameters == null)
             {

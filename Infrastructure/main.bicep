@@ -2,7 +2,6 @@ param location string = resourceGroup().location
 
 var containerAppEnvironmentName = 'jcp01-pub-sub-env'
 var publisher_container_app_name = 'pub'
-var daprPort = 3500 // Dapr sidecar port configured in Pub project client.UseHttpEndpoint("http://localhost:3500");
 
 module application_insight_deployment './resources/application_insights.bicep' = {
   name: 'application_insights'
@@ -48,7 +47,6 @@ module pub_container_app 'resources/container_app.bicep' = {
     containerAppName: publisher_container_app_name
     location: location
     container_app_env_id: containerAppEnv.outputs.id
-    imageName: 'docker.io/jesuscorral/pub:jcp08'
-    daprPort: daprPort
+    imageName: 'docker.io/jesuscorral/pub:jcp09'
   }
 }
