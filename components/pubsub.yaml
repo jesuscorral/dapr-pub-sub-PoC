@@ -7,6 +7,6 @@ spec:
   version: v1
   metadata:
     - name: connectionString # Required when not using Azure Authentication.
-      value: Endpoint=sb://pubsubjcp01sb.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=rCLMQ53aamiyg2wgoNb2Eh1ogVgDvFe90+ASbEJVMxo=
+      value: #TODO: Add your connection string here
     - name: isSessionEnabled
       value: "true"
