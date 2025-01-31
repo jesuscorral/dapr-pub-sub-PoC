@@ -34,7 +34,7 @@ jobs:
         NAMESPACE="jesuscorral"
         LATEST_VERSION=$(curl -s "https://hub.docker.com/v2/namespaces/$NAMESPACE/repositories/$REPOSITORY_NAME/tags" | jq -r '.results[].name' | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -n 1)
         echo "Latest version: $LATEST_VERSION"
-        echo "{name}={latest_version}" >> $LATEST_VERSION
+        echo "{latest_version}={$LATEST_VERSION}" >> $LATEST_VERSION
   
   increase-version:
     runs-on: ubuntu-latest
@@ -56,7 +56,7 @@ jobs:
           PATCH=${VERSION_PARTS[2]}
           NEW_VERSION="$MAJOR.$MINOR.$((PATCH + 1))"
           echo "New version: $NEW_VERSION"
-          echo "{name}={new_version}" >> $NEW_VERSION
+          echo "{new_version}={$NEW_VERSION}" >> $NEW_VERSION
     
   build-docker-image:
     runs-on: ubuntu-latest
