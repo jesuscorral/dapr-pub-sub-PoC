@@ -73,7 +73,7 @@ jobs:
       run: |
         REPOSITORY_NAME="pub"
         NAMESPACE="jesuscorral"
-        NEW_VERSION=$(echo ${{ needs.increment-version.outputs.new_version }})
+        NEW_VERSION=$(echo ${{ needs.increase-version.outputs.new_version }})
         docker buildx build --platform linux/amd64,linux/arm64 -t $NAMESPACE/$REPOSITORY_NAME:$NEW_VERSION -t $NAMESPACE/$REPOSITORY_NAME:latest -f ./Pub/Dockerfile .
 
   push-docker-image:
@@ -92,7 +92,7 @@ jobs:
       run: |
         REPOSITORY_NAME="pub"
         NAMESPACE="jesuscorral"
-        NEW_VERSION=$(echo ${{ needs.get-latest-version.outputs.new_version }})
+        NEW_VERSION=$(echo ${{ needs.increase-version.outputs.new_version }})
         docker push $NAMESPACE/$REPOSITORY_NAME:$NEW_VERSION
         docker push $NAMESPACE/$REPOSITORY_NAME:latest
 
