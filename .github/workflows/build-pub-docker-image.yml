@@ -36,7 +36,7 @@ jobs:
     - name: Increment version
       id: increment-version
       run: |
-        LATEST_VERSION=$(echo ${{ dependencies.getLatestVersion.outputs.latest_version }})
+        LATEST_VERSION=$(echo ${{ steps.get-latest-version.outputs.latest_version }})
         IFS='.' read -r -a VERSION_PARTS <<< "$LATEST_VERSION"
         MAJOR=${VERSION_PARTS[0]}
         MINOR=${VERSION_PARTS[1]}
@@ -44,4 +44,5 @@ jobs:
         NEW_VERSION="$MAJOR.$MINOR.$((PATCH + 1))"
         echo "New version: $NEW_VERSION"
         echo "::set-output name=new_version::$NEW_VERSION"
-  
+    
+
