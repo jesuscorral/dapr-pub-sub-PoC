@@ -1,6 +1,6 @@
 version: 1
 common:
-  resourcesPath: ../components/redis
+  resourcesPath: ../components
 apps:
   - appID: Pub
     appDirPath: ./Pub/
