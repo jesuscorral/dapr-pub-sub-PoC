@@ -45,8 +45,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Increment version
-        id: increment-version
+      - name: Increase version
+        id: increase-version
         run: |
           LATEST_VERSION=$(echo ${{ needs.get-latest-version.outputs.latest_version }})
           IFS='.' read -r -a VERSION_PARTS <<< "$LATEST_VERSION"
