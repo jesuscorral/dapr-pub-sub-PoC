@@ -13,6 +13,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Pub/Pub.csproj", "Pub/"]
+COPY ["nuget.config", "."]
 RUN dotnet restore "./Pub/Pub.csproj"
 COPY . .
 WORKDIR "/src/Pub"
