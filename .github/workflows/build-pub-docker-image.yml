@@ -11,6 +11,9 @@ jobs:
   get-latest-version:
     runs-on: ubuntu-latest
 
+    outputs:
+      latest_version: ${{ steps.get-latest-version.outputs.latest_version }}
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -31,19 +34,27 @@ jobs:
         NAMESPACE="jesuscorral"
         LATEST_VERSION=$(curl -s "https://hub.docker.com/v2/namespaces/$NAMESPACE/repositories/$REPOSITORY_NAME/tags" | jq -r '.results[].name' | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -n 1)
         echo "Latest version: $LATEST_VERSION"
-        echo "::set-output name=latest_version::$LATEST_VERSION"
+        echo "{name}={latest_version}" >> $LATEST_VERSION
+  
+  increase-version:
+    runs-on: ubuntu-latest
+    outputs:
+      new_version: ${{ steps.increment-version.outputs.new_version }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Increment version
-      id: increment-version
-      run: |
-        LATEST_VERSION=$(echo ${{ steps.get-latest-version.outputs.latest_version }})
-        IFS='.' read -r -a VERSION_PARTS <<< "$LATEST_VERSION"
-        MAJOR=${VERSION_PARTS[0]}
-        MINOR=${VERSION_PARTS[1]}
-        PATCH=${VERSION_PARTS[2]}
-        NEW_VERSION="$MAJOR.$MINOR.$((PATCH + 1))"
-        echo "New version: $NEW_VERSION"
-        echo "::set-output name=new_version::$NEW_VERSION"
+      - name: Increment version
+        id: increment-version
+        run: |
+          LATEST_VERSION=$(echo ${{ needs.get-latest-version.outputs.latest_version }})
+          IFS='.' read -r -a VERSION_PARTS <<< "$LATEST_VERSION"
+          MAJOR=${VERSION_PARTS[0]}
+          MINOR=${VERSION_PARTS[1]}
+          PATCH=${VERSION_PARTS[2]}
+          NEW_VERSION="$MAJOR.$MINOR.$((PATCH + 1))"
+          echo "New version: $NEW_VERSION"
+          echo "{name}={new_version}" >> $NEW_VERSION
     
   build-docker-image:
     runs-on: ubuntu-latest
@@ -61,11 +72,9 @@ jobs:
       run: |
         REPOSITORY_NAME="pub"
         NAMESPACE="jesuscorral"
-        NEW_VERSION=$(echo ${{ needs.get-latest-version.outputs.new_version }})
+        NEW_VERSION=$(echo ${{ needs.increment-version.outputs.new_version }})
         docker buildx build --platform linux/amd64,linux/arm64 -t $NAMESPACE/$REPOSITORY_NAME:$NEW_VERSION -t $NAMESPACE/$REPOSITORY_NAME:latest -f ./Pub/Dockerfile .
-        docker push $NAMESPACE/$REPOSITORY_NAME:$NEW_VERSION
-        docker push $NAMESPACE/$REPOSITORY_NAME:latest
-  
+
   push-docker-image:
     runs-on: ubuntu-latest
 
