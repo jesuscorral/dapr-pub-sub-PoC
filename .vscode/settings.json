@@ -11,5 +11,8 @@
     ],
     "scanLimit": 200
   },
-  "azureAutomation.directory.basePath": "c:\\Users\\JesúsCorralPérez"
+  "azureAutomation.directory.basePath": "c:\\Users\\JesúsCorralPérez",
+  "yaml.schemas": {
+    "https://json.schemastore.org/github-action.json": "untitled:Untitled-1"
+  }
 }

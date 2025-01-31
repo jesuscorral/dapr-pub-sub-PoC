@@ -4,19 +4,28 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.32.4.45862",
-      "templateHash": "7525366985970867564"
+      "version": "0.33.93.31351",
+      "templateHash": "12513646029446403774"
     }
   },
   "parameters": {
     "location": {
       "type": "string",
       "defaultValue": "[resourceGroup().location]"
+    },
+    "pub_image_tag": {
+      "type": "string",
+      "defaultValue": "1.0.0"
+    },
+    "sub_image_tag": {
+      "type": "string",
+      "defaultValue": "1.0.0"
     }
   },
   "variables": {
     "containerAppEnvironmentName": "jcp01-pub-sub-env",
-    "publisher_container_app_name": "pub"
+    "publisher_container_app_name": "pub",
+    "subscriber_container_app_name": "sub"
   },
   "resources": [
     {
@@ -42,8 +51,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.32.4.45862",
-              "templateHash": "6076313559054413711"
+              "version": "0.33.93.31351",
+              "templateHash": "9774228854700215337"
             }
           },
           "parameters": {
@@ -156,8 +165,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.32.4.45862",
-              "templateHash": "703221925244188131"
+              "version": "0.33.93.31351",
+              "templateHash": "4475722329825059226"
             }
           },
           "parameters": {
@@ -226,8 +235,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.32.4.45862",
-              "templateHash": "1357520020470003799"
+              "version": "0.33.93.31351",
+              "templateHash": "7999830374513989903"
             }
           },
           "parameters": {
@@ -302,8 +311,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.32.4.45862",
-              "templateHash": "10625315680667630345"
+              "version": "0.33.93.31351",
+              "templateHash": "6213528879307100552"
             }
           },
           "parameters": {
@@ -372,7 +381,7 @@
             "value": "[reference(resourceId('Microsoft.Resources/deployments', 'containerAppEnv'), '2022-09-01').outputs.id.value]"
           },
           "imageName": {
-            "value": "docker.io/jesuscorral/pub:jcp09"
+            "value": "[format('docker.io/jesuscorral/pub:{0}', parameters('pub_image_tag'))]"
           }
         },
         "template": {
@@ -381,8 +390,99 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.32.4.45862",
-              "templateHash": "10889896577874725292"
+              "version": "0.33.93.31351",
+              "templateHash": "1323984528705011090"
+            }
+          },
+          "parameters": {
+            "containerAppName": {
+              "type": "string"
+            },
+            "location": {
+              "type": "string"
+            },
+            "container_app_env_id": {
+              "type": "string"
+            },
+            "imageName": {
+              "type": "string"
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.App/containerApps",
+              "apiVersion": "2024-03-01",
+              "name": "[parameters('containerAppName')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "managedEnvironmentId": "[parameters('container_app_env_id')]",
+                "configuration": {
+                  "dapr": {
+                    "enabled": true,
+                    "appId": "[parameters('containerAppName')]"
+                  },
+                  "ingress": {
+                    "external": true,
+                    "targetPort": 8080,
+                    "transport": "auto"
+                  }
+                },
+                "template": {
+                  "containers": [
+                    {
+                      "name": "[parameters('containerAppName')]",
+                      "image": "[parameters('imageName')]",
+                      "resources": {
+                        "cpu": 2,
+                        "memory": "4.0Gi"
+                      }
+                    }
+                  ],
+                  "scale": {
+                    "minReplicas": 1,
+                    "maxReplicas": 2
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', 'containerAppEnv')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2022-09-01",
+      "name": "sub_container_app",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "containerAppName": {
+            "value": "[variables('subscriber_container_app_name')]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "container_app_env_id": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'containerAppEnv'), '2022-09-01').outputs.id.value]"
+          },
+          "imageName": {
+            "value": "[format('docker.io/jesuscorral/sub:{0}', parameters('sub_image_tag'))]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.33.93.31351",
+              "templateHash": "1323984528705011090"
             }
           },
           "parameters": {
