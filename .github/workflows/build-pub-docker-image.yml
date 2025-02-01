@@ -82,7 +82,7 @@ jobs:
   push-docker-image:
     runs-on: ubuntu-latest
 
-    needs: build-docker-image
+    needs: [build-docker-image, increase-version]
 
     steps:
     - name: Checkout repository
