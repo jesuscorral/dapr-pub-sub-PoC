@@ -68,16 +68,13 @@ jobs:
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
-
-    - name: List directory contents
-      run: ls -la
     
     - name: Build Docker image
       run: |
         REPOSITORY_NAME="pub"
         NAMESPACE="jesuscorral"
         NEW_VERSION=$(echo ${{ needs.increase-version.outputs.new_version }})
-        docker buildx build -t $NAMESPACE/$REPOSITORY_NAME:$NEW_VERSION -t $NAMESPACE/$REPOSITORY_NAME:latest -f ./Pub/Dockerfile .
+        docker buildx build -t $NAMESPACE/$REPOSITORY_NAME:$NEW_VERSION -t $NAMESPACE/$REPOSITORY_NAME:latest -f ./Pub/Dockerfile  --load .
 
   push-docker-image:
     runs-on: ubuntu-latest
