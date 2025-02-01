@@ -75,6 +75,12 @@ jobs:
         NAMESPACE="jesuscorral"
         NEW_VERSION=$(echo ${{ needs.increase-version.outputs.new_version }})
         docker buildx build -t $NAMESPACE/$REPOSITORY_NAME:$NEW_VERSION -t $NAMESPACE/$REPOSITORY_NAME:latest -f ./Pub/Dockerfile  --load .
+   
+    - name: Upload Docker image as artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: docker-image
+        path: /tmp/$REPOSITORY_NAME.tar
 
   push-docker-image:
     runs-on: ubuntu-latest
@@ -88,13 +94,23 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
 
+    - name: Download Docker image artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: docker-image
+        path: /tmp
+
     - name: Log in to Docker Hub
       uses: docker/login-action@v2
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-
+    - name: Load Docker image
+      run: |
+        REPOSITORY_NAME="pub"
+        docker load -i /tmp/$REPOSITORY_NAME.tar
+        
     - name: Push Docker image
       run: |
         REPOSITORY_NAME="pub"
