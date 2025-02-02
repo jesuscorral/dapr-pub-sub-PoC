@@ -18,7 +18,6 @@ jobs:
   
   increase-version:
     needs: get-latest-version
-
     uses: jesuscorral/resuable-workflows/.github/workflows/increase-version.yml@main
     with:
       current_version: ${{ needs.get-latest-version.outputs.current_version }}
