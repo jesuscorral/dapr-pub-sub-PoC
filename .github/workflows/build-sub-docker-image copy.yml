@@ -10,7 +10,7 @@ jobs:
   get-latest-version:
     uses: jesuscorral/resuable-workflows/.github/workflows/get-latest-version-docker-image.yml@main
     with:
-      repository_name: pub
+      repository_name: sub
       namespace: jesuscorral
     secrets:
       username: ${{ secrets.DOCKER_USERNAME }}
@@ -26,8 +26,8 @@ jobs:
     needs: increase-version
     uses: jesuscorral/resuable-workflows/.github/workflows/build-push-docker-image.yml@main
     with:
-      docker_file_path: "./Pub/Dockerfile"
-      repository_name: pub
+      docker_file_path: "./Sub/Dockerfile"
+      repository_name: sub
       namespace: jesuscorral
       version: ${{ needs.increase-version.outputs.new_version }}
     secrets:
