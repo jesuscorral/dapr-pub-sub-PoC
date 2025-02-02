@@ -58,7 +58,7 @@ jobs:
           echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
 
   build-docker-image:
-    uses: jesuscorral/resuable-workflows/.github/workflows/build-push-docker-image.yml@v1.0.1
+    uses: jesuscorral/resuable-workflows/.github/workflows/build-push-docker-image.yml@v1.0.2
     with:
       repository_name: pub
       namespace: jesuscorral
