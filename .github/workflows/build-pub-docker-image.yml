@@ -20,7 +20,7 @@ jobs:
     needs: get-latest-version
     uses: jesuscorral/resuable-workflows/.github/workflows/increase-version.yml@main
     with:
-      current_version: ${{ needs.get-latest-version-docker-image.outputs.latest_version }}
+      current_version: ${{ needs.get-latest-version.outputs.latest_version }}
 
   build-docker-image:
     needs: increase-version
